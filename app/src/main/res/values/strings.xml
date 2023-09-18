@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Wandroid</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_system">体系</string>
+    <string name="nav_wechat">公众号</string>
+    <string name="nav_todo">待办</string>
+    <string name="tab_discovery">发现</string>
+    <string name="tab_qa">问答</string>
+    <string name="tab_square">广场</string>
+    <!--待办-->
+    <string name="todo_type_all">全部</string>
+    <string name="todo_type_work">工作</string>
+    <string name="todo_type_study">学习</string>
+    <string name="todo_type_life">生活</string>
 </resources>
