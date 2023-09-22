@@ -30,7 +30,7 @@ fun HomePage(navController: NavController) {
             stringResource(R.string.tab_square)
         )
         val coroutineScope = rememberCoroutineScope()
-        val pageState = rememberPagerState(initialPage = 0)
+        val pageState = rememberPagerState(initialPage = 0) { titles.size }
         HomeAppToolbar(title = stringResource(id = R.string.nav_home))
         TabLayoutBar(titles = titles, checkedPosition = pageState.currentPage) {
             coroutineScope.launch {
@@ -38,16 +38,15 @@ fun HomePage(navController: NavController) {
             }
         }
         HorizontalPager(
-            pageCount = titles.size,
             state = pageState,
         ) {
             when (it) {
                 //发现
-                0 -> DiscoveryPage()
+                0 -> DiscoveryPage(navController)
                 //问答
-                1 -> QAPage()
+                1 -> QAPage(navController)
                 //广场
-                2 -> SquarePage()
+                2 -> SquarePage(navController)
             }
         }
 

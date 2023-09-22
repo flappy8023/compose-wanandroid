@@ -12,4 +12,8 @@
     <string name="todo_type_work">工作</string>
     <string name="todo_type_study">学习</string>
     <string name="todo_type_life">生活</string>
+
+    <string name="list_content_error">出错了，请再试一次吧</string>
+    <string name="list_content_retry">重试</string>
+    <string name="list_content_no_more">没有更多了</string>
 </resources>

@@ -1,10 +1,10 @@
 package com.flappy.wandroid.data.bean
 
 /**
- * @Author: luweiming
- * @Description:
- * @Date: Created in 14:07 2022/8/24
- */
+ * @Author flappy8023
+ * @Description //TODO
+ * @Date 2023年09月22日 9:20
+ **/
 data class Message(
     var category: Int,
     var date: Long,

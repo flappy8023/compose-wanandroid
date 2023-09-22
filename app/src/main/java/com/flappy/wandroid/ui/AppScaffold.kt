@@ -7,15 +7,22 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.flappy.wandroid.config.RoutePath
+import com.flappy.wandroid.ext.fromJson
 import com.flappy.wandroid.ui.page.home.HomePage
 import com.flappy.wandroid.ui.page.system.SystemPage
 import com.flappy.wandroid.ui.page.todo.TodoPage
+import com.flappy.wandroid.ui.page.web.WebItem
+import com.flappy.wandroid.ui.page.web.WebViewPage
 import com.flappy.wandroid.ui.page.wechat.WechatPage
 import com.flappy.wandroid.ui.widget.BottomNavView
 
@@ -28,11 +35,20 @@ import com.flappy.wandroid.ui.widget.BottomNavView
 @Composable
 fun AppScaffold() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     Scaffold(
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),
-        bottomBar = { BottomNavView(navController = navController) },
+        bottomBar = {
+            //仅首页展示下方导航栏
+            when (currentDestination?.route) {
+                RoutePath.ROUTE_HOME, RoutePath.ROUTE_SYSTEM, RoutePath.ROUTE_WECHAT, RoutePath.ROUTE_TODO -> BottomNavView(
+                    navController = navController
+                )
+            }
+        },
     ) {
         NavGraph(navController, it)
     }
@@ -64,6 +80,15 @@ fun NavGraph(navController: NavHostController, innerPadding: PaddingValues) {
         //个人资料
         composable(RoutePath.ROUTE_PROFILE) {
 
+        }
+        composable(
+            route = RoutePath.ROUTE_H5_DETAIL + "/{webItem}",
+            arguments = listOf(navArgument("webItem") { type = NavType.StringType })
+        ) {
+            val webItem = it.arguments?.getString("webItem")?.fromJson<WebItem>()
+            if (null != webItem) {
+                WebViewPage(navController = navController, webItem = webItem)
+            }
         }
     }
 }
