@@ -8,4 +8,5 @@ package com.flappy.wandroid.data.api
 sealed class ApiResult<out T> {
     data class Success<out T>(val data: T) : ApiResult<T>()
     data class Failure(val exception: ApiException) : ApiResult<Nothing>()
+
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.flappy.wandroid.config.RoutePath
 import com.flappy.wandroid.ui.page.web.WebItem
@@ -23,17 +22,17 @@ import com.flappy.wandroid.utils.RouteUtils
 @Composable
 fun DiscoveryPage(navController: NavController,viewModel: DiscoveryVM = hiltViewModel()) {
     val viewState = viewModel.viewState
-    val discoveryData = viewState.pagingData.collectAsLazyPagingItems()
+    val discoveryData = viewModel.pager.collectAsLazyPagingItems()
     val pinedArticles = viewState.topArticles
-    val bannerList = viewState.bannerList
+    val bannerList = viewState.banners
     val listSate = viewState.listState
-    val isRefresh = viewState.loading
+    val isRefresh = viewState.isLoading
     Column {
         RefreshList(
             isRefresh = isRefresh,
             lazyPagingItems = discoveryData,
             lazyListState = listSate,
-            onRefresh = { viewModel.dispatchAction(DiscoveryUIAction.Refresh) }) {
+            onRefresh = { viewModel.sendEvent(DiscoveryUiEvent.Refresh) }) {
             if (bannerList.isNotEmpty()) {
                 item {
                     Banner(

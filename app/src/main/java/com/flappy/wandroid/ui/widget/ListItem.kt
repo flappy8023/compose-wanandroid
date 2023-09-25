@@ -93,9 +93,14 @@ fun ArticleItem(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.constrainAs(tags) {
-                top.linkTo(topFlag.top)
-                bottom.linkTo(topFlag.bottom)
-                start.linkTo(topFlag.end, margin = 20.dp)
+                if (pinToTop) {
+                    top.linkTo(topFlag.top)
+                    bottom.linkTo(topFlag.bottom)
+                    start.linkTo(topFlag.end, margin = 20.dp)
+                } else {
+                    top.linkTo(title.bottom, margin = 4.dp)
+                    start.linkTo(parent.start)
+                }
             }
         )
 

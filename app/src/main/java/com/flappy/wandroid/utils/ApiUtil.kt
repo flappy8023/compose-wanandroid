@@ -8,24 +8,15 @@ import com.flappy.wandroid.data.api.ExceptionHandle
 
 /**
  * @Author: luweiming
- * @Description:
+ * @Description: 对接口调用进行一层封装，捕获异常并返回应用自有的异常信息
  * @Date: Created in 17:58 2022/9/6
  */
-suspend fun <T : Any> safeApiCall(call: suspend () -> ApiResponse<T>): Result<T?> {
-    return Result.runCatching {
-        val response = call.invoke()
-        if (response.isSuccess) {
-            return success(response.data)
-        }
-        return failure(ApiException(response.errorCode, response.errorMsg))
-    }
-}
 
-suspend fun <T : Any> safeCall(call: suspend () -> ApiResponse<T>): ApiResult<T?> {
+suspend fun <T : Any> safeCall(call: suspend () -> ApiResponse<T>): ApiResult<T> {
     return try {
         val response = call.invoke()
         if (response.isSuccess) {
-            ApiResult.Success(response.data)
+            ApiResult.Success(response.data!!)
         } else {
             ApiResult.Failure(ApiException(response.errorCode, response.errorMsg))
         }

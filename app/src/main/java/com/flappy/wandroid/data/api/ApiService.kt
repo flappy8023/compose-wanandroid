@@ -1,5 +1,6 @@
 package com.flappy.wandroid.data.api
 
+import com.flappy.wandroid.config.GlobalConfig
 import com.flappy.wandroid.data.bean.Article
 import com.flappy.wandroid.data.bean.BannerItem
 import com.flappy.wandroid.data.bean.CoinRankItem
@@ -38,7 +39,7 @@ interface ApiService {
     @GET("article/list/{pageNo}/json")
     suspend fun getHomeArticleList(
         @Path("pageNo") pageNo: Int,
-        @Query("pageSize") pageSize: Int
+        @Query("pageSize") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
 
@@ -86,7 +87,7 @@ interface ApiService {
     suspend fun getArticlesOfTree(
         @Path("page") page: Int,
         @Query("cid") cid: Long,
-        @Query("pageSize") pageSize: Int
+        @Query("pageSize") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
     /**
@@ -120,7 +121,7 @@ interface ApiService {
     suspend fun getProjectList(
         @Path("page") page: Int,
         @Path("cid") cid: Long,
-        @Path("pageSize") pageSize: Int
+        @Path("pageSize") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
 
@@ -165,7 +166,7 @@ interface ApiService {
     @GET("lg/collect/list/{pageNo}/json")
     suspend fun getCollectList(
         @Path("pageNo") pageNo: Int,
-        @Query("pageSize") pageSize: Int
+        @Query("pageSize") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
     /**
@@ -268,8 +269,8 @@ interface ApiService {
     @POST("article/query/{pageNo}/json")
     suspend fun searchArticle(
         @Path("pageNo") pageNo: Int,
-        @Query("pageSize") pageSize: Int,
-        @Field("k") keyword: String
+        @Field("k") keyword: String,
+        @Query("pageSize") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
     /**
@@ -379,7 +380,7 @@ interface ApiService {
     @GET("user_article/list/{pageNo}/json")
     suspend fun getSquareArticleList(
         @Path("pageNo") pageNo: Int,
-        @Query("page_size") pageSize: Int
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
 
@@ -402,7 +403,7 @@ interface ApiService {
      */
     @GET("user/lg/private_articles/{pageNo}/json")
     suspend fun getMySharedArticles(
-        @Query("page_size") pageSize: Int,
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE,
         @Path("pageNo") pageNo: Int
     ): ApiResponse<UserArticles>
 
@@ -431,7 +432,7 @@ interface ApiService {
     @GET("wenda/list/{pageNo}/json")
     suspend fun getQAList(
         @Path("pageNo") pageNo: Int,
-        @Query("page_size") pageSize: Int = 30
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
 
@@ -464,7 +465,7 @@ interface ApiService {
     @GET("message/lg/readed_list/{pageNo}/json")
     suspend fun getReadedMsgList(
         @Path("pageNo") pageNo: Int,
-        @Query("page_size") pageSize: Int
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Message>>
 
     /**
@@ -476,7 +477,7 @@ interface ApiService {
     @GET("message/lg/unread_list/{pageNo}/json")
     suspend fun getUnreadMsgList(
         @Path("pageNo") pageNo: Int,
-        @Query("page_size") pageSize: Int
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Message>>
 
 
@@ -496,7 +497,7 @@ interface ApiService {
     suspend fun getWechatHistoryArticles(
         @Path("id") id: Long,
         @Path("pageNo") pageNo: Int,
-        @Query("page_size") pageSize: Int
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE
     ): ApiResponse<PagedData<Article>>
 
     /**
@@ -536,7 +537,7 @@ interface ApiService {
     @GET("article/list/{pageNo}/json")
     suspend fun getTutorialArticleList(
         @Path("pageNo") pageNo: Int,
-        @Query("page_size") pageSize: Int,
+        @Query("page_size") pageSize: Int = GlobalConfig.PAGE_SIZE,
         @Query("cid") cid: Long
     ): ApiResponse<PagedData<Article>>
 
