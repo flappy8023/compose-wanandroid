@@ -13,4 +13,5 @@ object RoutePath {
     const val ROUTE_PROFILE = "profile"
     const val ROUTE_H5_DETAIL = "h5Detail"
     const val ROUTE_SETTINGS = "settings"
+    const val ROUTE_LOGIN = "login"
 }

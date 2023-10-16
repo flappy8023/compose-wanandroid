@@ -1,11 +1,13 @@
 package com.flappy.wandroid.ui.widget
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -25,7 +27,7 @@ fun BottomNavView(navController: NavController) {
     val navList = listOf(
         Home, System, Wechat, TODO
     )
-    NavigationBar {
+    NavigationBar(modifier = Modifier.navigationBarsPadding()) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val curDestination = navBackStackEntry?.destination
         navList.forEach { navItem ->

@@ -7,6 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.flappy.wandroid.base.BaseViewModel
 import com.flappy.wandroid.base.IViewEvent
+import com.flappy.wandroid.base.IViewSideEffect
 import com.flappy.wandroid.base.IViewState
 import com.flappy.wandroid.config.GlobalConfig
 import com.flappy.wandroid.data.bean.Article
@@ -26,7 +27,7 @@ import javax.inject.Inject
  **/
 @HiltViewModel
 class DiscoveryVM @Inject constructor(private val repository: HomeRepository) :
-    BaseViewModel<DiscoveryUiState, DiscoveryUiEvent>() {
+    BaseViewModel<DiscoveryUiState, DiscoveryUiEvent, IViewSideEffect>() {
     val pager = Pager(
         config = PagingConfig(GlobalConfig.PAGE_SIZE),
         pagingSourceFactory = repository::discoveryPageSource

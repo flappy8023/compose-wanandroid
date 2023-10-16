@@ -12,7 +12,6 @@ import com.flappy.wandroid.R
 import com.flappy.wandroid.ui.page.home.discovery.DiscoveryPage
 import com.flappy.wandroid.ui.page.home.qa.QAPage
 import com.flappy.wandroid.ui.page.home.square.SquarePage
-import com.flappy.wandroid.ui.widget.HomeAppToolbar
 import com.flappy.wandroid.ui.widget.TabLayoutBar
 import kotlinx.coroutines.launch
 
@@ -31,7 +30,6 @@ fun HomePage(navController: NavController) {
         )
         val coroutineScope = rememberCoroutineScope()
         val pageState = rememberPagerState(initialPage = 0) { titles.size }
-        HomeAppToolbar(title = stringResource(id = R.string.nav_home))
         TabLayoutBar(titles = titles, checkedPosition = pageState.currentPage) {
             coroutineScope.launch {
                 pageState.scrollToPage(it)

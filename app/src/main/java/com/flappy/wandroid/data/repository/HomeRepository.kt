@@ -2,7 +2,7 @@ package com.flappy.wandroid.data.repository
 
 import com.flappy.wandroid.data.api.ApiResult
 import com.flappy.wandroid.data.api.ApiService
-import com.flappy.wandroid.data.pading.BasePagingSource
+import com.flappy.wandroid.data.paging.BasePagingSource
 import com.flappy.wandroid.ui.widget.BannerItem
 import com.flappy.wandroid.utils.safeCall
 import kotlinx.coroutines.flow.flow
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @Description 首页数据源
  * @Date 2023年09月25日 10:21
  **/
-class HomeRepository @Inject constructor(val api: ApiService) {
+class HomeRepository @Inject constructor(val api: ApiService) : BaseRepository() {
     fun discoveryPageSource() =
         BasePagingSource { api.getHomeArticleList(it) }
 
@@ -22,6 +22,9 @@ class HomeRepository @Inject constructor(val api: ApiService) {
         api.getQAList(it)
     }
 
+    fun squarePageSource() = BasePagingSource {
+        api.getSquareArticleList(it)
+    }
 
     fun getBanners() = flow {
         emit(safeCall { api.getBanners() })

@@ -1,4 +1,4 @@
-package com.flappy.wandroid.ext
+package com.flappy.wandroid.utils
 
 import com.google.gson.Gson
 

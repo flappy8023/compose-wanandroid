@@ -1,7 +1,6 @@
 package com.flappy.wandroid.ui.page.web
 
 import android.annotation.SuppressLint
-import android.os.Parcelable
 import android.view.ViewGroup.LayoutParams
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import com.flappy.wandroid.ui.widget.AppToolbar
 
 @Composable
 fun WebViewPage(navController: NavController,webItem: WebItem) {
@@ -29,19 +27,17 @@ fun WebViewPage(navController: NavController,webItem: WebItem) {
         var webViewManager: WebViewManager? by remember {
             mutableStateOf(null)
         }
-        val (appbar, progressbar, webContainer) = createRefs()
+        val (progressbar, webContainer) = createRefs()
         var progress = remember {
             0
         }
-        AppToolbar(navController=navController,title = webItem.title, modifier = Modifier.constrainAs(appbar) {
-            top.linkTo(parent.top)
-        })
+
         if (progress != 100) {
             LinearProgressIndicator(modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp)
                 .constrainAs(progressbar) {
-                    top.linkTo(appbar.bottom)
+                    top.linkTo(parent.top)
                 }, progress = progress.toFloat()
             )
         }

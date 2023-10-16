@@ -10,7 +10,7 @@ import com.flappy.wandroid.config.RoutePath
 import com.flappy.wandroid.ui.page.web.WebItem
 import com.flappy.wandroid.ui.widget.ArticleItem
 import com.flappy.wandroid.ui.widget.Banner
-import com.flappy.wandroid.ui.widget.RefreshList
+import com.flappy.wandroid.ui.widget.PagingRefreshList
 import com.flappy.wandroid.utils.RouteUtils
 
 /**
@@ -21,14 +21,14 @@ import com.flappy.wandroid.utils.RouteUtils
 
 @Composable
 fun DiscoveryPage(navController: NavController,viewModel: DiscoveryVM = hiltViewModel()) {
-    val viewState = viewModel.viewState
+    val viewState = viewModel.viewState.value
     val discoveryData = viewModel.pager.collectAsLazyPagingItems()
     val pinedArticles = viewState.topArticles
     val bannerList = viewState.banners
     val listSate = viewState.listState
     val isRefresh = viewState.isLoading
     Column {
-        RefreshList(
+        PagingRefreshList(
             isRefresh = isRefresh,
             lazyPagingItems = discoveryData,
             lazyListState = listSate,

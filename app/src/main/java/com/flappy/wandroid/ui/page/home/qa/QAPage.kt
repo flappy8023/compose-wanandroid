@@ -5,7 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.flappy.wandroid.ui.widget.ArticleItem
-import com.flappy.wandroid.ui.widget.RefreshList
+import com.flappy.wandroid.ui.widget.PagingRefreshList
 import com.flappy.wandroid.utils.RouteUtils
 
 /**
@@ -17,8 +17,8 @@ import com.flappy.wandroid.utils.RouteUtils
 @Composable
 fun QAPage(navController: NavController, viewModel: QAViewModel = hiltViewModel()) {
     val qaData = viewModel.pagingData.collectAsLazyPagingItems()
-    RefreshList(lazyPagingItems = qaData, onRefresh = { }) {
-        items(qaData.itemCount) { index ->
+    PagingRefreshList(lazyPagingItems = qaData) {
+        items(qaData.itemCount, key = { index -> qaData[index]!!.id }) { index ->
             ArticleItem(
                 article = qaData[index]!!,
                 onClick = {

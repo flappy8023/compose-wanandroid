@@ -17,7 +17,7 @@ import com.flappy.wandroid.data.bean.Tutorial
 import com.flappy.wandroid.data.bean.UserArticles
 import com.flappy.wandroid.data.bean.UserInfo
 import com.flappy.wandroid.data.bean.UserInfoData
-import com.flappy.wandroid.data.bean.WXOfficialAccount
+import com.flappy.wandroid.data.bean.WechatAccount
 import com.flappy.wandroid.data.bean.WebSiteBean
 import retrofit2.http.*
 
@@ -486,7 +486,7 @@ interface ApiService {
      * @return Response<List<WXOfficialAccount>>
      */
     @GET("wxarticle/chapters/json")
-    suspend fun getWechatAccountList(): ApiResponse<List<WXOfficialAccount>>
+    suspend fun getWechatAccountList(): ApiResponse<List<WechatAccount>>
 
     /**
      * 15.2 获取某个公众号历史数据

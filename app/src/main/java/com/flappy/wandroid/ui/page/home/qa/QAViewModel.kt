@@ -21,6 +21,8 @@ class QAViewModel @Inject constructor(private val repository: HomeRepository) : 
         config = PagingConfig(GlobalConfig.PAGE_SIZE),
         pagingSourceFactory = repository::qaPageSource
     ).flow.cachedIn(viewModelScope)
+
+
 }
 
 

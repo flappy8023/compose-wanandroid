@@ -1,9 +1,6 @@
 package com.flappy.wandroid.ui.widget
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,20 +10,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.pullrefresh.PullRefreshIndicator
+import androidx.compose.material3.pullrefresh.pullRefresh
+import androidx.compose.material3.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,15 +27,15 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.flappy.wandroid.R
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun <T : Any> RefreshList(
+fun <T : Any> PagingRefreshList(
     lazyPagingItems: LazyPagingItems<T>,
     isRefresh: Boolean = false,
-    onRefresh: () -> Unit,
+    onRefresh: () -> Unit = {},
     lazyListState: LazyListState = rememberLazyListState(),
-    content: LazyListScope.() -> Unit
+    content: LazyListScope.() -> Unit = {}
 ) {
+
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefresh,
         onRefresh = {
@@ -87,42 +80,43 @@ fun <T : Any> RefreshList(
     }
 }
 
-
-@Preview
 @Composable
-fun ErrorPage(retry: () -> Unit = {}) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.error_24),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
-            Text(
-                text = stringResource(id = R.string.list_content_error),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 20.dp)
-            )
-            OutlinedButton(
-                onClick = { retry() },
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 0.dp),
-                modifier = Modifier.padding(top = 20.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.list_content_retry),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
+fun RefreshList(
+    modifier: Modifier = Modifier,
+    lazyListState: LazyListState = rememberLazyListState(),
+    isRefresh: Boolean = false,
+    isError: Boolean = false,
+    isLoading: Boolean = false,
+    onRefresh: () -> Unit = {},
+    content: LazyListScope.() -> Unit = {}
+) {
+    val pullRefreshState =
+        rememberPullRefreshState(refreshing = isRefresh, onRefresh = { onRefresh() })
+    if (isError) {
+        ErrorPage { onRefresh() }
+    } else if (isLoading) {
+        LoadingView()
+    } else {
+        Box(modifier = modifier.pullRefresh(pullRefreshState)) {
 
-                )
+            LazyColumn(modifier = Modifier.fillMaxSize(), state = lazyListState) {
+                //增加顶部刷新加载框
+                item {
+                    if (isRefresh) {
+                        FooterLoading()
+                    }
+                }
+                content()
             }
+            PullRefreshIndicator(
+                refreshing = isRefresh,
+                state = pullRefreshState,
+                Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
+
 
 @Preview
 @Composable

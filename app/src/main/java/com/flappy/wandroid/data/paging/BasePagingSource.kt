@@ -1,4 +1,4 @@
-package com.flappy.wandroid.data.pading
+package com.flappy.wandroid.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

@@ -21,15 +21,21 @@ object RouteUtils {
         singleTop: Boolean = true,
         needRestoreState: Boolean = true
     ) {
-        var argument = ""
-        when (args) {
-            is Int, String, Float, Double, Boolean, Long -> {
-                argument = "/$args"
-            }
+        var argument: String? = null
+        if (null != args) {
+            argument = when (args) {
+                is Int, String, Float, Double, Boolean, Long -> {
+                    "/$args"
+                }
 
-            else -> argument = "/${Uri.encode(Gson().toJson(args))}"
+                else -> "/${Uri.encode(Gson().toJson(args))}"
+            }
         }
-        navController.navigate(destination + argument) {
+        navController.navigate(
+            if (null != argument) {
+                destination + argument
+            } else destination
+        ) {
             if (!backStackRouteName.isNullOrEmpty()) {
                 popUpTo(backStackRouteName)
             }

@@ -7,4 +7,4 @@ package com.flappy.wandroid.base
  **/
 interface IViewState
 interface IViewEvent
-interface IEffect
+interface IViewSideEffect

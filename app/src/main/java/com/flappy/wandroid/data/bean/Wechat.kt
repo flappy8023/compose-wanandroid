@@ -5,7 +5,7 @@ package com.flappy.wandroid.data.bean
  * @Description:
  * @Date: Created in 18:30 2022/8/24
  */
-class WXOfficialAccount(
+class WechatAccount(
     var articleList: List<Any>,
     var author: String,
     var children: List<Any>,
