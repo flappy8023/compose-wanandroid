@@ -5,6 +5,7 @@ import com.flappy.wandroid.R
 import com.flappy.wandroid.base.BaseViewModel
 import com.flappy.wandroid.data.api.ApiResult
 import com.flappy.wandroid.data.repository.UserRepository
+import com.flappy.wandroid.utils.UserManager
 import com.flappy.wandroid.utils.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -42,6 +43,7 @@ class LoginViewModel @Inject constructor(private val repository: UserRepository)
                         copy(loginSuccess = true)
                     }
                     setEffect { LoginContract.Effect.NavBack }
+                    UserManager.setLoginSuccess(result.data)
                 }
 
                 is ApiResult.Failure -> {

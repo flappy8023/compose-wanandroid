@@ -19,6 +19,9 @@ object UserManager : CoroutineScope by MainScope() {
     private val _userState = mutableStateOf(UserState(false, null))
     val userState: State<UserState> = _userState
 
+    fun init(){
+
+    }
     fun setLoginSuccess(userInfo: UserInfo) {
         _userState.value = UserState(isLogin = true, userInfo = userInfo)
         launch {
@@ -27,6 +30,7 @@ object UserManager : CoroutineScope by MainScope() {
             }
         }
     }
+    
 }
 
 data class UserState(val isLogin: Boolean, val userInfo: UserInfo?)

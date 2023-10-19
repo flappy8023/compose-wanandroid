@@ -25,7 +25,7 @@ object ApiManager {
             .connectTimeout(10, TimeUnit.SECONDS)
             .callTimeout(10, TimeUnit.SECONDS)
 //            .cookieJar(PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(MyApp.app)))
-//            .addNetworkInterceptor(CookieInterceptor())
+            .addNetworkInterceptor(CookieInterceptor())
             .addNetworkInterceptor(CacheInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) })
             .build()
