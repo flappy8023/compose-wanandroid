@@ -287,8 +287,8 @@ interface ApiService {
         @Field("title") title: String,
         @Field("content") content: String,
         @Field("date") date: String?,
-        @Field("type") type: Int,
-        @Field("priority") priority: Int
+        @Field("type") type: Int = 1,
+        @Field("priority") priority: Int = 1
     ): ApiResponse<Any>
 
     /**
@@ -302,15 +302,8 @@ interface ApiService {
      * @param priority Int
      */
     @POST("lg/todo/update/{id}/json")
-    @FormUrlEncoded
     suspend fun updateTODO(
-        @Path("id") id: Long,
-        @Field("title") title: String,
-        @Field("content") content: String,
-        @Field("date") date: String,
-        @Field("status") status: Int,
-        @Field("type") type: Int,
-        @Field("priority") priority: Int
+        @Body body: Todo
     ): ApiResponse<Any>
 
     /**

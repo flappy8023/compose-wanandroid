@@ -3,6 +3,7 @@ package com.flappy.wandroid.ui.page.todo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -10,12 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,6 +33,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.flappy.wandroid.R
 import com.flappy.wandroid.config.RoutePath
 import com.flappy.wandroid.data.bean.Todo
+import com.flappy.wandroid.ui.widget.HomeAppToolbar
 import com.flappy.wandroid.ui.widget.PagingRefreshList
 import com.flappy.wandroid.utils.RouteUtils
 import com.flappy.wandroid.utils.UserManager
@@ -40,29 +46,55 @@ import kotlinx.coroutines.flow.collectLatest
  **/
 @Composable
 fun TodoPage(navController: NavController, viewModel: TodoViewModel = hiltViewModel()) {
-    var userState = UserManager.userState.value
-    LaunchedEffect(key1 = null, block = {
-        viewModel.effect.collectLatest {
-            when (it) {
-                TodoContract.Effect.Login -> RouteUtils.navTo(navController, RoutePath.ROUTE_LOGIN)
-                is TodoContract.Effect.GoDetail -> {}
+    var showDetail by remember {
+        mutableStateOf(false)
+    }
+    val userState = UserManager.userState.value
+
+    Scaffold(
+        topBar = { HomeAppToolbar(title = stringResource(id = R.string.nav_todo)) },
+        floatingActionButton = {
+            if (userState.isLogin) {
+                FloatingActionButton(onClick = {
+                    showDetail = true
+                }) {
+
+                }
             }
         }
-    })
-    if (userState.isLogin) {
-        TodoContent(viewModel)
-    } else {
-        NotLogin(viewModel = viewModel)
-    }
+    ) {
+        LaunchedEffect(key1 = null, block = {
+            viewModel.effect.collectLatest {
+                when (it) {
+                    TodoContract.Effect.Login -> RouteUtils.navTo(
+                        navController,
+                        RoutePath.ROUTE_LOGIN
+                    )
 
+                    is TodoContract.Effect.GoDetail -> {}
+                    is TodoContract.Effect.ShowToast -> {}
+                }
+            }
+        })
+        if(showDetail){
+            TodoDetail()
+        }
+        if (userState.isLogin) {
+            TodoContent(viewModel, it)
+        } else {
+            NotLogin(viewModel = viewModel, it)
+        }
+    }
 
 }
 
 @Composable
-fun NotLogin(viewModel: TodoViewModel) {
+fun NotLogin(viewModel: TodoViewModel, paddingValues: PaddingValues) {
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -83,7 +115,7 @@ fun NotLogin(viewModel: TodoViewModel) {
 }
 
 @Composable
-fun TodoContent(viewModel: TodoViewModel) {
+fun TodoContent(viewModel: TodoViewModel, paddingValues: PaddingValues) {
     val state = viewModel.viewState.value
     val lazyPagingItems = viewModel.todoPager().collectAsLazyPagingItems()
     PagingRefreshList(lazyPagingItems = lazyPagingItems) {
