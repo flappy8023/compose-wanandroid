@@ -1,9 +1,9 @@
 package com.flappy.wandroid.ui.page.todo
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -13,7 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +32,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.flappy.wandroid.R
 import com.flappy.wandroid.config.RoutePath
 import com.flappy.wandroid.data.bean.Todo
-import com.flappy.wandroid.ui.widget.HomeAppToolbar
+import com.flappy.wandroid.ui.page.ScaffoldState
+import com.flappy.wandroid.ui.page.homeAppBarState
 import com.flappy.wandroid.ui.widget.PagingRefreshList
 import com.flappy.wandroid.utils.RouteUtils
 import com.flappy.wandroid.utils.UserManager
@@ -45,56 +45,64 @@ import kotlinx.coroutines.flow.collectLatest
  * @Date 2023年09月18日 16:06
  **/
 @Composable
-fun TodoPage(navController: NavController, viewModel: TodoViewModel = hiltViewModel()) {
+fun TodoPage(
+    navController: NavController,
+
+    viewModel: TodoViewModel = hiltViewModel(),
+    onCompose: (ScaffoldState) -> Unit
+) {
+
     var showDetail by remember {
         mutableStateOf(false)
     }
-    val userState = UserManager.userState.value
+    val userState by remember {
+        UserManager.userState
+    }
+    LaunchedEffect(key1 = null) {
+        onCompose(
+            ScaffoldState(
+                homeAppBarState(navController),
+                floatingActionButton = {
+                    Log.d("todoPage","userState = $userState")
+                    userState?.let {
+                        FloatingActionButton(onClick = {
+                            showDetail = true
+                        }) {
 
-    Scaffold(
-        topBar = { HomeAppToolbar(title = stringResource(id = R.string.nav_todo)) },
-        floatingActionButton = {
-            if (userState.isLogin) {
-                FloatingActionButton(onClick = {
-                    showDetail = true
-                }) {
+                        }
+                    }
+                })
+        )
+        viewModel.effect.collectLatest {
+            when (it) {
+                TodoContract.Effect.Login -> RouteUtils.navTo(
+                    navController,
+                    RoutePath.ROUTE_LOGIN
+                )
 
-                }
+                is TodoContract.Effect.GoDetail -> {}
+                is TodoContract.Effect.ShowToast -> {}
             }
-        }
-    ) {
-        LaunchedEffect(key1 = null, block = {
-            viewModel.effect.collectLatest {
-                when (it) {
-                    TodoContract.Effect.Login -> RouteUtils.navTo(
-                        navController,
-                        RoutePath.ROUTE_LOGIN
-                    )
-
-                    is TodoContract.Effect.GoDetail -> {}
-                    is TodoContract.Effect.ShowToast -> {}
-                }
-            }
-        })
-        if(showDetail){
-            TodoDetail()
-        }
-        if (userState.isLogin) {
-            TodoContent(viewModel, it)
-        } else {
-            NotLogin(viewModel = viewModel, it)
         }
     }
 
+    if (showDetail) {
+        TodoDetail()
+    }
+    if (userState != null) {
+        TodoContent(viewModel)
+    } else {
+        NotLogin(viewModel = viewModel)
+    }
 }
 
+
 @Composable
-fun NotLogin(viewModel: TodoViewModel, paddingValues: PaddingValues) {
+fun NotLogin(viewModel: TodoViewModel) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -115,7 +123,7 @@ fun NotLogin(viewModel: TodoViewModel, paddingValues: PaddingValues) {
 }
 
 @Composable
-fun TodoContent(viewModel: TodoViewModel, paddingValues: PaddingValues) {
+fun TodoContent(viewModel: TodoViewModel) {
     val state = viewModel.viewState.value
     val lazyPagingItems = viewModel.todoPager().collectAsLazyPagingItems()
     PagingRefreshList(lazyPagingItems = lazyPagingItems) {

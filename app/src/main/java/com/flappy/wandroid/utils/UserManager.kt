@@ -2,10 +2,8 @@ package com.flappy.wandroid.utils
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.datastore.preferences.core.edit
-import com.flappy.wandroid.MyApplication
-import com.flappy.wandroid.config.GlobalConfig
 import com.flappy.wandroid.data.bean.UserInfo
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -16,21 +14,25 @@ import kotlinx.coroutines.launch
  * @Date 2023年10月16日 11:21
  **/
 object UserManager : CoroutineScope by MainScope() {
-    private val _userState = mutableStateOf(UserState(false, null))
-    val userState: State<UserState> = _userState
+    private val _userState = mutableStateOf(getCacheUserInfo())
+    val userState: State<UserInfo?> = _userState
 
-    fun init(){
-
+    private fun getCacheUserInfo(): UserInfo? {
+        val cache = DataStoreUtil.getData(KeyConst.KEY_USERINFO, "")
+        return cache.fromJson()
     }
-    fun setLoginSuccess(userInfo: UserInfo) {
-        _userState.value = UserState(isLogin = true, userInfo = userInfo)
+
+    fun loginSuccess(userInfo: UserInfo) {
+        _userState.value = userInfo
         launch {
-            MyApplication.context.dataStore.edit {
-                it[GlobalConfig.KEY_LOGIN] = true
-            }
+            DataStoreUtil.putData(KeyConst.KEY_USERINFO, Gson().toJson(userInfo))
         }
     }
-    
+
+    fun logout() {
+        launch {
+            DataStoreUtil.putData(KeyConst.KEY_USERINFO, "")
+        }
+    }
 }
 
-data class UserState(val isLogin: Boolean, val userInfo: UserInfo?)

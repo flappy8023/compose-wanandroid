@@ -7,22 +7,47 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import com.flappy.wandroid.R
+import com.flappy.wandroid.ui.page.AppBarState
+import com.flappy.wandroid.ui.page.ScaffoldState
 
 @Composable
-fun WebViewPage(navController: NavController,webItem: WebItem) {
+fun WebViewPage(
+    navController: NavController,
+    webItem: WebItem,
+    onCompose: (ScaffoldState) -> Unit
+) {
+
+    LaunchedEffect(key1 = null) {
+        onCompose(ScaffoldState(AppBarState(webItem.title, actions = {
+            Image(
+                painter = painterResource(id = R.drawable.round_more_horiz_24),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+
+                    })
+        })))
+    }
     ConstraintLayout {
         var webViewManager: WebViewManager? by remember {
             mutableStateOf(null)

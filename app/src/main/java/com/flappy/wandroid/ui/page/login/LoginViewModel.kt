@@ -43,7 +43,7 @@ class LoginViewModel @Inject constructor(private val repository: UserRepository)
                         copy(loginSuccess = true)
                     }
                     setEffect { LoginContract.Effect.NavBack }
-                    UserManager.setLoginSuccess(result.data)
+                    UserManager.loginSuccess(result.data)
                 }
 
                 is ApiResult.Failure -> {
